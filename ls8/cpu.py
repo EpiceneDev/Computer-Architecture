@@ -8,14 +8,14 @@ class CPU:
     def __init__(self):
         """Construct a new CPU."""
         self.pc = 0 # program pointer
-        self.ram = 0 * [255] # register
-        self.address = None
+        self.ram = [0] * 256 # 256k memory
+        self.register = [0] * 8 # 8k register
 
-    def ram_read(address):
-        data = ram[address]
-        print(f'{data}')
+    def ram_read(self, MAR):
+        # bring in the mem address register to read data from
+        return self.register[MAR]
 
-    def ram_write(data):
+    def ram_write(self, MAR):
         index = ram[pc+1]
         ram[index] = data
         
