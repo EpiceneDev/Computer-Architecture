@@ -16,7 +16,7 @@ class CPU:
 
     def ram_read(self, MAR):
         # MAR is mem address register to read data from
-        return self.register[MAR]
+        return self.ram[MAR]
 
         # MDR is the data in the memory register
     def ram_write(self, MAR, MDR):
@@ -77,20 +77,27 @@ class CPU:
         """Run the CPU."""
         # read the memory address that's stored in register PC, 
         # and store that result in IR, the Instruction Register. 
-        IR = self.ram[self.pc]
+        running = True
 
-        operand_a = self.ram_read(self.pc + 1) # register
-        operand_b = self.ram_read(self.pc + 2) # immediate
+        while running:
+            IR = self.ram[self.pc]
 
-        opcode = IR
+            operand_a = self.ram_read(self.pc + 1) # register
+            operand_b = self.ram_read(self.pc + 2) # immediate
 
-        if opcode == HLT:
-            sys.exit()
-        # Set the value of a register to an integer.
-        elif opcode == LDI:
-            self.register[operand_a] = operand_b
-            # Jump over operands to go to next instruction
-            self.pc += 3
-        elif opcode == PRN:
-            print(register[operand_a])
-            self.pc += 2
+            opcode = IR
+
+            if opcode == HLT:
+                sys.exit()
+
+            # Set the value of a register to an integer.
+            elif opcode == LDI:
+                self.register[operand_a] = operand_b
+                # Jump over operands to go to next instruction
+                self.pc += 3
+
+            # Print the register address
+            elif opcode == PRN:
+                print("HERE: ", self.pc)
+                print(self.register[operand_a])
+                self.pc += 2
