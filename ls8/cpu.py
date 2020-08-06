@@ -15,9 +15,8 @@ class CPU:
         # bring in the mem address register to read data from
         return self.register[MAR]
 
-    def ram_write(self, MAR):
-        index = ram[pc+1]
-        ram[index] = data
+    def ram_write(self, MAR, MDR):
+        self.ram[MDR] = MAR
         
 
 
