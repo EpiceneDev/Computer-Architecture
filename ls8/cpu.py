@@ -2,6 +2,8 @@
 
 import sys
 
+
+
 HLT = 0b00000001
 LDI = 0b10000010
 PRN = 0b01000111
@@ -22,26 +24,52 @@ class CPU:
     def ram_write(self, MAR, MDR):
         self.ram[MDR] = MAR
 
-    def load(self):
+    def load(self, file):
         """Load a program into memory."""
+
+        # if you forget the filename
+        if len(sys.argv) < 2:
+            print("did you forget the file to open?")
+            print('Usage: filename file_to_open')
+            sys.exit()
+
 
         address = 0
 
-        # For now, we've just hardcoded a program:
+        try: 
+            # Load program into memory
+            with open(sys.argv[1]) as file:
+                for line in file:
+                    returned_split = line.split('#')
+                    possible_num == returned_split[0]
+                    if possible_num == ' ':
+                        continue
 
-        program = [
-            # From print8.ls8
-            0b10000010, # LDI R0,8
-            0b00000000,
-            0b00001000,
-            0b01000111, # PRN R0
-            0b00000000,
-            0b00000001, # HLT
-        ]
+                    if possible_num == '1' or possible_num[0] == '0':
+                        num = possible_num[:8]
 
-        for instruction in program:
-            self.ram[address] = instruction
-            address += 1
+                    print(f'{num}: {int(num, 2)}')
+
+                    self.ram[address] = int(num, 2)
+                    address += 1
+        except FileNotFoundError:
+            print(f'{sys.argv[0]}: {sys.argv[1]} not found')
+
+        # # For now, we've just hardcoded a program:
+
+        # program = [
+        #     # From print8.ls8
+        #     0b10000010, # LDI R0,8
+        #     0b00000000,
+        #     0b00001000,
+        #     0b01000111, # PRN R0
+        #     0b00000000,
+        #     0b00000001, # HLT
+        # ]
+
+        # for instruction in program:
+        #     self.ram[address] = instruction
+        #     address += 1
 
 
     def alu(self, op, reg_a, reg_b):
@@ -80,6 +108,7 @@ class CPU:
         running = True
 
         while running:
+            # Get the first instruction
             IR = self.ram[self.pc]
 
             operand_a = self.ram_read(self.pc + 1) # register
@@ -98,6 +127,5 @@ class CPU:
 
             # Print the register address
             elif opcode == PRN:
-                print("HERE: ", self.pc)
                 print(self.register[operand_a])
                 self.pc += 2
