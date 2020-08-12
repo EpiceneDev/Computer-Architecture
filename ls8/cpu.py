@@ -2,8 +2,6 @@
 
 import sys
 
-
-
 HLT = 0b00000001
 LDI = 0b10000010
 PRN = 0b01000111
