@@ -183,6 +183,15 @@ class CPU:
                 print(self.register[operand_a])
                 # self.pc += 2
 
+            def save(self, operand_a, operand_b):
+                num = operand_a
+                index = operand_b
+                registers[index] = num
+
+            def print_register(self, operand_a):
+                reg_idx = operand_a
+                print(registers[reg_indx])
+
             def add(self, operand_a, operand_b):
                 return self.alu(ADD, operand_a, operand_b)
 
@@ -204,21 +213,28 @@ class CPU:
                 
                 register[7] += 1
 
+            if command == HLT:
+                sys.exit()
+
             def call(self, operand_a, operand_b):
-                sp = registers[7]
-                # decrement the SP
+                # remember where to return to by
+                # getting address of next instruction
+                next_instruction_address = self.pc + 2
+                # Push onto the stack...
+                ## decrement the SP
                 self.register[7] -= 1
-                sp = self.reg[7]
+                ## put on the stack at the sp
+                sp = registers[7]
+                
+                self.ram[sp] = next_instruction_address
 
-                return_address = self.pc + 2
+                reg_address = operand_a
 
-                self.ram[sp] = ValueError
-
-                destination_address = self.reg[operand_a]
+                destination_address = self.register[reg_address]
 
                 self.pc = destination_address
 
             def ret(self, _):
-                pass
-            if command == HLT:
-                sys.exit()
+                sp = registers[7]
+                sp += 1
+
